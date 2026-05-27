@@ -1,7 +1,7 @@
 import { loadVersionCheckState, saveVersionCheckState } from './state';
 import type { ReleaseVersionInfo, VersionCheckResult } from './types';
 
-const LATEST_RELEASE_API = 'https://api.github.com/repos/suyancc/openai-plus-vxt/releases/latest';
+const LATEST_RELEASE_API = 'https://api.github.com/repos/renrenjiami/openai-plus-vxt-vxt-paypal-plus/releases/latest';
 const CHECK_INTERVAL_MS = 30 * 60 * 1000;
 
 interface GithubReleaseAsset {
