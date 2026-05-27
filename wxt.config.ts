@@ -10,6 +10,7 @@ export default defineConfig({
       'https://auth.openai.com/*',
       'https://chatgpt.com/*',
       'https://pay.openai.com/*',
+      'https://checkout.stripe.com/*',
       'https://www.paypal.com/*',
       'https://paypal.com/*',
       'https://www.meiguodizhi.com/*',

@@ -20,6 +20,7 @@ const ASSISTANT_URL_PREFIXES = [
   'https://chatgpt.com/',
   'https://auth.openai.com/',
   'https://pay.openai.com/',
+  'https://checkout.stripe.com/',
   'https://www.paypal.com/',
   'https://paypal.com/',
 ];

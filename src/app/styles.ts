@@ -86,7 +86,7 @@ export const PANEL_STYLES = `
 
 .opx-tabs {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
   margin-bottom: 0;
   padding: 3px;
@@ -793,5 +793,164 @@ export const PANEL_STYLES = `
   .opx-panel {
     max-height: calc(100vh - 24px);
   }
+}
+
+.opx-note {
+  margin: 0 0 8px;
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.opx-payment-stage {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 8px;
+  padding: 8px;
+  border: 1px solid rgba(47, 209, 124, 0.28);
+  border-radius: 6px;
+  background: rgba(47, 209, 124, 0.08);
+}
+
+.opx-payment-stage-line {
+  color: #bbf7d0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.opx-payment-detail {
+  color: #cbd5e1;
+  font-size: 11px;
+  line-height: 15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.opx-payment-errors {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 8px;
+}
+
+.opx-payment-error {
+  padding: 6px 8px;
+  border: 1px solid rgba(248, 113, 113, 0.42);
+  border-radius: 6px;
+  background: rgba(127, 29, 29, 0.2);
+  color: #fecaca;
+  font-size: 11px;
+  line-height: 15px;
+  overflow-wrap: anywhere;
+}
+
+.opx-payment-form {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.opx-payment-row {
+  display: grid;
+  gap: 3px;
+}
+
+.opx-payment-label {
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.opx-payment-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 6px;
+  background: #111827;
+  color: #e5f7ef;
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.opx-payment-input:focus {
+  border-color: #2fd17c;
+}
+
+.opx-payment-result {
+  margin: 6px 0 0;
+  padding: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #cbd5e1;
+  font: inherit;
+  font-size: 11px;
+  line-height: 15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.opx-btn {
+  box-sizing: border-box;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: #182235;
+  color: #93e4bd;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  border: 1px solid rgba(47, 209, 124, 0.34);
+}
+
+.opx-btn:hover {
+  border-color: rgba(47, 209, 124, 0.74);
+  color: #bbf7d0;
+}
+
+.opx-btn-primary {
+  background: #2fd17c;
+  color: #04130a;
+  border-color: #2fd17c;
+}
+
+.opx-btn-primary:hover {
+  background: #34e388;
+  color: #021107;
+}
+
+.opx-btn-danger {
+  background: rgba(127, 29, 29, 0.32);
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.42);
+}
+
+.opx-btn-danger:hover {
+  background: rgba(127, 29, 29, 0.48);
+  color: #fee2e2;
+}
+
+.opx-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.opx-payment-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.opx-payment-buttons .opx-btn {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 `;

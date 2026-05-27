@@ -1,6 +1,16 @@
 import { loadAddressAutofillSettings, saveAddressAutofillSettings } from '../settings/state';
 import type { AddressAutofillSettings } from '../settings/types';
 import type { AddressProfile, RandomAddressResponse } from './types';
+import {
+  getAddressErrorState,
+  getCardDeclinedState,
+  getCheckoutAmountSummary,
+  hasCaptcha,
+  hideHostedAutocomplete,
+  isHostedCheckoutPage,
+  removeCaptcha,
+  startAutocompleteObserver,
+} from './hosted-checkout-guards';
 
 const LOG_PREFIX = '[OPX Pay Autofill]';
 const PAYPAL_SELECTORS = [
@@ -18,13 +28,18 @@ let pageAddress: AddressProfile | null = null;
 let pageAddressScope = '';
 
 export function initPayOpenAiAddressAutofill(): void {
-  if (initialized || location.hostname !== 'pay.openai.com') {
+  if (initialized || !isHostedCheckoutPage()) {
     return;
   }
 
   initialized = true;
   installStorageListener();
   installObserver();
+  startAutocompleteObserver();
+  hideHostedAutocomplete();
+  if (hasCaptcha()) {
+    removeCaptcha();
+  }
   scheduleAutofill(800);
 }
 
@@ -63,17 +78,36 @@ async function runAutofill(): Promise<void> {
 }
 
 export async function fillPayOpenAiAddressNow(address: AddressProfile): Promise<{ ok: boolean; filled: number; message: string }> {
-  if (location.hostname !== 'pay.openai.com') {
-    return { ok: false, filled: 0, message: '当前不是 pay.openai.com 页面' };
+  if (!isHostedCheckoutPage()) {
+    return { ok: false, filled: 0, message: '当前不是 pay.openai.com / checkout.stripe.com 页面' };
   }
+
+  if (hasCaptcha()) {
+    removeCaptcha();
+  }
+  hideHostedAutocomplete();
 
   selectPaypalIfPresent();
   await delay(450);
   const filled = await fillCheckoutFields(address);
+  hideHostedAutocomplete();
+
+  const addressError = getAddressErrorState();
+  const cardDeclined = getCardDeclinedState();
+  const amountSummary = getCheckoutAmountSummary();
+
+  const notes: string[] = [];
+  if (addressError.hasError) notes.push(`地址错误：${addressError.message}`);
+  if (cardDeclined.hasError) notes.push(`卡片被拒：${cardDeclined.message}`);
+  if (amountSummary.hasTodayDue && !amountSummary.isZero && amountSummary.rawAmount) {
+    notes.push(`今日应付 ${amountSummary.rawAmount}（注意：非 0 金额可能没有免费试用资格）`);
+  }
+  const suffix = notes.length ? `；${notes.join('；')}` : '';
+
   return {
     ok: filled > 0,
     filled,
-    message: filled > 0 ? `已填写 OpenAI 支付页 ${filled} 项` : '未找到可填写的 OpenAI 支付字段',
+    message: filled > 0 ? `已填写 hosted checkout ${filled} 项${suffix}` : `未找到可填写的字段${suffix}`,
   };
 }
 

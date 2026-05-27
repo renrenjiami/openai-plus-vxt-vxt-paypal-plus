@@ -1,5 +1,6 @@
 import { createAddressPanel } from '../features/address-autofill/panel';
 import { createLinkExtractorPanel } from '../features/link-extractor/panel';
+import { createPaymentPanel } from '../features/payment/panel';
 import { createRegisterPanel } from '../features/register/panel';
 import type { RegisterController } from '../features/register/types';
 import { createSettingsDialog } from '../features/settings/panel';
@@ -38,7 +39,8 @@ export function createPanel(root: ShadowRoot, registerController: RegisterContro
   const linkTab = createTab('link', '提链接');
   const addressTab = createTab('address', '地址');
   const smsTab = createTab('sms', '接码');
-  tabs.append(registerTab, linkTab, addressTab, smsTab);
+  const paymentTab = createTab('payment', '支付');
+  tabs.append(registerTab, linkTab, addressTab, smsTab, paymentTab);
 
   const settingsButton = document.createElement('button');
   settingsButton.className = 'opx-icon-button';
@@ -54,12 +56,14 @@ export function createPanel(root: ShadowRoot, registerController: RegisterContro
   const linkView = createView();
   const addressView = createView();
   const smsView = createView();
+  const paymentView = createView();
 
   const handles: Record<FeatureTab, FeaturePanelHandle> = {
     register: createRegisterPanel(registerView, registerController),
     link: createLinkExtractorPanel(linkView),
     address: createAddressPanel(addressView),
     sms: createSmsPanel(smsView),
+    payment: createPaymentPanel(paymentView),
   };
   const versionNotice = createVersionNotice();
   const settingsDialog = createSettingsDialog({
@@ -87,13 +91,14 @@ export function createPanel(root: ShadowRoot, registerController: RegisterContro
   };
 
   const renderActiveTab = () => {
-    for (const item of [registerTab, linkTab, addressTab, smsTab]) {
+    for (const item of [registerTab, linkTab, addressTab, smsTab, paymentTab]) {
       item.classList.toggle('is-active', item.dataset.tab === activeTab);
     }
     registerView.hidden = activeTab !== 'register';
     linkView.hidden = activeTab !== 'link';
     addressView.hidden = activeTab !== 'address';
     smsView.hidden = activeTab !== 'sms';
+    paymentView.hidden = activeTab !== 'payment';
   };
 
   const updateState = async () => {
@@ -109,6 +114,7 @@ export function createPanel(root: ShadowRoot, registerController: RegisterContro
   linkTab.addEventListener('click', () => void setActiveTab('link'));
   addressTab.addEventListener('click', () => void setActiveTab('address'));
   smsTab.addEventListener('click', () => void setActiveTab('sms'));
+  paymentTab.addEventListener('click', () => void setActiveTab('payment'));
   settingsButton.addEventListener('click', () => settingsDialog.open());
 
   collapseButton.addEventListener('click', () => {
@@ -118,7 +124,7 @@ export function createPanel(root: ShadowRoot, registerController: RegisterContro
   });
 
   topbar.append(tabs, settingsButton);
-  panel.append(topbar, versionNotice.element, state, registerView, linkView, addressView, smsView, settingsDialog.element);
+  panel.append(topbar, versionNotice.element, state, registerView, linkView, addressView, smsView, paymentView, settingsDialog.element);
   shell.append(collapseButton, panel);
   root.append(style, shell);
 
@@ -138,6 +144,9 @@ function getStateLabel(activeTab: FeatureTab, registerController: RegisterContro
   }
   if (activeTab === 'address') {
     return '地址：随机资料';
+  }
+  if (activeTab === 'payment') {
+    return '支付：PayPal 流程';
   }
   return '接码：短信验证码';
 }
